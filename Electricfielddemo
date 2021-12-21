@@ -1,0 +1,55 @@
+GlowScript 3.0 VPython
+from visual import *
+
+scene.width = 800
+scene.height = 800
+mzofp = 1e-7 ##mu zero over four pi
+qe = 1.6e-19
+mproton = 1.7e-27
+Bo = vector(0,0.2,0)
+bscale = 1
+
+##This code draws a grid and displays a magnetic field
+xmax = 0.4
+dx =0.1
+yg = -0.1
+x = -xmax
+while x < xmax + dx:
+    curve(pos=(vector(x,yg,-xmax),vector(x,yg,xmax)),color=vector(0.7,0.7,0.7))
+    x=x+dx
+z = -xmax
+while z < xmax + dx:
+    curve(pos=(vector(-xmax,yg,z),vector(xmax,yg,z)),color=vector(0.7,-.7,0.7))
+    z=z+dx
+x = -xmax
+dx = 0.2
+while x < xmax + dx:
+    z=-xmax
+    while z < xmax+dx:
+        arrow(pos=vector(x,yg,z),axis=Bo*bscale,color=vector(0,0.8,0.8))
+        z = z+dx
+    x = x+dx
+######################################
+
+##objects and initial conditions
+particle = sphere(pos=vector(0,0.15,0.3),radius=1e-2,color=color.yellow,make_trail = True)
+##make trail easier to see (thicker)
+particle.trail= particle.radius/3
+vparticle = vector(-2e6,0,0)
+p = mproton*vparticle
+qparticle = qe
+deltat = 5e-11
+t=0
+#################################################### MY CODE GOES  TO SIMULATE PARTICLE MOTIO
+moving_r=particle.pos
+from visual.graph import *
+xcurve=gcurve(color=color.blue, dot = True)
+
+while t<3.34e-7:
+    rate(500)
+    F=qe*cross(p/mproton,Bo)
+    p=p+F*deltat
+    xcurve.plot( ( pos=(t, particle.pos.x) ) )
+    particle.pos=particle.pos+p/mproton*deltat
+    t=t+deltat
+    
