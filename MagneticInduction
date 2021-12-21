@@ -1,0 +1,33 @@
+GlowScript 3.0 VPython
+from visual import *
+
+scalefactor = 3e-9
+proton = sphere(radius=1e-11, pos=vector(-4e-10,0,0),color=color.red,q=1.602e-19,maketrail=True)
+v=vector(40000,0,0)
+
+deltat=1e-16
+t=0
+
+pntrz=[]
+z=-4e-10
+zmax=4e-10
+dz=5e-11
+R= 8e-11
+dtheta=pi/6
+while z < zmax:
+    theta=0
+    while theta<2*pi:
+        a=arrow(pos=vector(z,R*cos(theta),R*(sin(theta))),color=color.magenta,axis=vector(0,0,0))
+        pntrz.append(a)
+        theta=theta+dtheta 
+    z=z+dz
+
+while t < 2e-14:
+    rate(40)
+    proton.pos=proton.pos+v*deltat
+    for pointer in pntrz:
+        r=pointer.pos-proton.pos
+        rhat=hat(r)
+        B=1e-7*proton.q*cross(v,rhat)/mag(r)**2
+        pointer.axis=B*scalefactor
+    t=t+deltat
