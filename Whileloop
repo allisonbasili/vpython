@@ -1,0 +1,33 @@
+GlowScript 3.0 VPython
+from visual import *
+
+bxz = []
+z = 0.01
+x= 0.001
+zmax = 0.11
+dz = 0.05
+dx = 0.05
+R = 0.09
+dtheta = pi/10
+dphi = pi/10
+
+while len(bxz) < 39:
+    rate(2)
+    theta = 0
+    while theta < 2 * pi:
+        a = box(pos=vector(R*cos(theta), R*sin(theta), z),
+            size=vector(0.008,0.008,0.008), color = color.yellow)
+        bxz.append(a)
+        theta = theta + dtheta
+    z = z + dz 
+    phi = 0
+    while phi < 2 * pi:
+        b = box(pos=vector(R*cos(phi),x, R*sin(phi)),
+            size=vector(0.008,0.008,0.008), color = color.white)
+        bxz.append(b)
+        phi = phi + dphi       
+    x = x + dx
+      
+for thisbox in bxz:
+    rate(2)
+    thisbox.color = color.magenta
